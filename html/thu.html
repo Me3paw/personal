@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thư</title>
+    <script src="../js/jquery-3.6.4.min.js"></script>
+    <style>
+        #envelope {
+        position: relative;
+        width: 280px;
+        height: 180px;
+        border-bottom-left-radius: 6px;
+        border-bottom-right-radius: 6px;
+        margin-left: auto;
+        margin-right: auto;
+        top: 150px;
+        background-color: #00334c;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        .front {
+        position: absolute;
+        width: 0;
+        height: 0;
+        z-index: 3;
+        }
+        .flap {
+        border-left: 140px solid transparent;
+        border-right: 140px solid transparent;
+        border-bottom: 82px solid transparent;
+        /* a little smaller */
+        border-top: 98px solid #00334c;
+        /* a little larger */
+        transform-origin: top;
+        pointer-events: none;
+        }
+        .pocket {
+        border-left: 140px solid #0077B2;
+        border-right: 140px solid #0077B2;
+        border-bottom: 90px solid #006da3;
+        border-top: 90px solid transparent;
+        border-bottom-left-radius: 6px;
+        border-bottom-right-radius: 6px;
+        }
+        .letter {
+        position: relative;
+        background-color: #fff;
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+        height: 90%;
+        top: 5%;
+        border-radius: 6px;
+        box-shadow: 0 2px 26px rgba(0, 0, 0, 0.12);
+        }
+        .letter:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+       
+        }
+        .words {
+        width: 80%;
+        transform: scale(1,0.83);
+        }
+        .open .flap {
+        transform: rotateX(180deg);
+        transition: transform 0.4s ease, z-index 0.6s;
+        z-index: 1;
+        }
+        .close .flap {
+        transform: rotateX(0deg);
+        transition: transform 0.4s 0.6s ease, z-index 1s;
+        z-index: 5;
+        }
+        .close .letter {
+        transform: translateY(0px) ;
+        transition: transform 0.4s ease, z-index 1s;
+        z-index: 1;
+        }
+        .open .letter {
+        transform: translateY(-150px) scale(1,1.2);
+        transition: transform 0.4s 0.6s ease, z-index 0.6s;
+        z-index: 2;
+        }
+        .hearts {
+        position: absolute;
+        top: 90px;
+        left: 0;
+        right: 0;
+        z-index: 2;
+        }
+        .image {
+        position: relative;
+        left: 20px;
+        }
+        .image1 {
+        position: absolute;
+        left: 20px;
+        }
+        .image2 {
+        position: absolute;
+        left: 20px;
+        }
+        .heart {
+        position: absolute;
+        bottom: 0;
+        right: 10%;
+        pointer-events: none;
+        }
+        .heart:before, .heart:after {
+        position: absolute;
+        content: "";
+        left: 50px;
+        top: 0;
+        width: 50px;
+        height: 80px;
+        background: #D00000;
+        border-radius: 50px 50px 0 0;
+        transform: rotate(-45deg);
+        transform-origin: 0 100%;
+        pointer-events: none;
+        }
+        .heart:after {
+        left: 0;
+        transform: rotate(45deg);
+        transform-origin: 100% 100%;
+        }
+        .heart:after {
+        left: 0;
+        transform: rotate(45deg);
+        transform-origin: 100% 100%;
+        }
+        .a1 {
+        left: 20%;
+        -webkit-transform: scale(0.6);
+        -moz-transform: scale(0.6);
+        transform: scale(0.6);
+        opacity: 1;
+        -webkit-animation: slideUp 4s linear 1, sideSway 2s ease-in-out 4 alternate;
+        -moz-animation: slideUp 4s linear 1, sideSway 2s ease-in-out 4 alternate;
+        animation-fill-mode: forwards;
+        animation-delay: 0.7s;
+        }
+        .a2 {
+        left: 55%;
+        -webkit-transform: scale(1);
+        -moz-transform: scale(1);
+        transform: scale(1);
+        opacity: 1;
+        -webkit-animation: slideUp 5s linear 1, sideSway 4s ease-in-out 2 alternate;
+        -moz-animation: slideUp 5s linear 1, sideSway 4s ease-in-out 2 alternate;
+        animation-fill-mode: forwards;
+        animation-delay: 0.7s;
+        }
+        .a3 {
+        left: 10%;
+        -webkit-transform: scale(0.8);
+        -moz-transform: scale(0.8);
+        transform: scale(0.8);
+        opacity: 1;
+        -webkit-animation: slideUp 7s linear 1, sideSway 2s ease-in-out 6 alternate;
+        -moz-animation: slideUp 7s linear 1, sideSway 2s ease-in-out 6 alternate;
+        animation-fill-mode: forwards;
+        animation-delay: 0.7s;
+        }
+        @-webkit-keyframes slideUp {
+        0% {
+            top: 0;
+        }
+        100% {
+            top: -600px;
+        }
+        }
+        @keyframes slideUp {
+        0% {
+            top: 0;
+        }
+        100% {
+            top: -600px;
+        }
+        }
+        @-webkit-keyframes sideSway {
+        0% {
+            margin-left: 0px;
+        }
+        100% {
+            margin-left: 50px;
+        }
+        }
+        @keyframes sideSway {
+        0% {
+            margin-left: 0px;
+        }
+        100% {
+            margin-left: 50px;
+        }
+        }
+        body {
+        background-color: #a8e2ff;
+        }
+        .envlope-wrapper {
+        height: 380px;
+        }
+        .reset {
+        text-align: center;
+        }
+        .reset button {
+        font-weight: 800;
+        font-style: normal;
+        transition: all 0.1s linear;
+        -webkit-appearance: none;
+        background-color: transparent;
+        border: solid 2px #0077B2;
+        border-radius: 4px;
+        color: #0077B2;
+        display: inline-block;
+        font-size: 14px;
+        text-transform: uppercase;
+        margin: 5px;
+        padding: 10px;
+        line-height: 1em;
+        text-decoration: none;
+        min-width: 120px;
+        cursor: pointer;
+        }
+        .reset button:hover {
+        background-color: #0077B2;
+        color: #fff;
+        }
+    </style>
+    <script>
+        $( document ).ready(function() {
+    
+    var envelope = $('#envelope');
+    var btn_open = $("#open");
+    var btn_reset = $("#reset");
+    
+    envelope.click( function() {
+        open();
+    });
+    btn_open.click( function() {
+        open();
+    });
+    btn_reset.click( function() {
+        close();
+    });
+
+    function open() {
+        envelope.addClass("open")
+           .removeClass("close");
+    }
+    function close() {
+        envelope.addClass("close")
+           .removeClass("open");
+    }
+    });
+    </script>
+</head>
+<body>
+    <div class="envlope-wrapper">
+        <div id="envelope" class="close">
+            <div class="front flap"></div>
+            <div class="front pocket"></div>
+            <div class="heart1"></div>
+            <div class="letter" style="overflow: auto;">
+                <div class ="word">
+                    <h1 style="font:bold; font-size: 25px; padding-left: 10px; text-align: center;" >SUY NGHĨ NGHĨ SUY</h1>
+                    <img src="../img/bugcat-capoo-question-meme-512x512.png" width="200" height="200" class="image">
+                    <div style="padding-left: 10px; padding-right: 10px;">Thì em hỏi sao mà anh lại nhắn đống đó. <br>
+                        Suy cho cùng, chuyện hôm qua anh nhận ra anh chỉ nghĩ cho bản thân mình. <br>
+                        Mấy hôm nay khá là stress với anh, vậy nên anh muốn ở cạnh em, muốn được em an ủi.  <br>
+                        Em là người duy nhất anh muốn được nghe lời an ủi. <br>
+                        Nên khi em nói em bận, anh cảm giác như là em bị cướp mất ấy. <br>
+                        Và anh phản ứng lại, <br>
+                        Quên rằng chuyện hai đứa có đời sống riêng là chuyện rất bình thường, <br>
+                        em đi làm không có nghĩa là em không còn thời gian cho 2 đứa, <br>
+                        và đúng ra thì anh cũng vẫn luôn có quan điểm 2 đứa cùng trở nên tốt hơn vì nhau mà. <br>
+                        Vào lúc đó, anh chỉ sợ kiểu mình không còn gặp nhau nữa rồi bị phai nhạt ấy. <br>
+                        đâm ra mè nheo đòi gặp em như một đứa con nít :< <br>
+                        nên anh xin lỗi :< <br>
+                        Sau cùng thì anh vẫn muốn cả 2 cùng tốt lên, sống theo ý mình muốn. <br>
+                        Nên cứ làm những gì em muốn nha. <br>
+                        Anh qua ủng hộ :> anh vẫn được gặp em đỡ nhớ, mà k ảnh hưởng tới ai :> <br>
+                        p/s: nhưng mà vẫn cẩn thận burnout nha, kiểu stress về tâm lí k muốn làm gì nữa ấy. <br>
+                        <br>
+                        <br>
+                    </div>
+                </div>
+            </div>
+            <div class="hearts">
+                <div class="heart a1"></div>
+                <div class="heart a2"></div>
+                <div class="heart a3"></div>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- 
+    
+    Inspired by:
+    
+        * https://medium.com/web-for-you/how-to-make-a-interactive-envelope-9df970614eea
+        * https://codepen.io/lisafolkerson/pen/BjRoJO    
+    
+    -->
+</body>
+</html>
